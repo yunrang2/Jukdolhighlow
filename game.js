@@ -12,10 +12,18 @@ cards.init({
 
 // 새로운 카드 덱을 생성합니다.
 let deck = new cards.Deck();
+deck.addCards(cards.all);
+deck.addCards(cards.all.filter(card => card.rank === "2")); // ACE 카드를 한 번 더 추가합니다.
+
+// 섞은 후에 덱을 랜더링합니다.
+cards.shuffle(deck);
+deck.render({immediate:true});
+
 let upperhand; // 상단 핸드
 let lowerhand; // 하단 핸드
 let iOpen = 0; // 현재 열려있는 라운드
 let userChoices = ['', '', '']; // 사용자 선택을 저장하는 배열
+
 
 // 사용자의 선택을 처리하는 함수입니다.
 function handleUserChoice(choice) {
@@ -58,39 +66,47 @@ $('#open').click(() => {
 	$('.button-group').hide();
 	if (userChoices.every(choice => choice !== '')) { // High Low Same 선택이 모두 완료된 경우에만 실행
 			// 각 카드 확인을 순차적으로 실행하기 위해 setTimeout 사용
-			function revealNextCard(index) {
-					if (index < 3) {
+			
+			function revealNextCard(iOpen) {
+					if (iOpen < 3) {
 							for (const card of deck) {
 									card.moveTo(50, card.y, 100); // 카드 이동 애니메이션
 							}
-							upperhand[index].moveTo(upperhand[index].x, 130, 50, () => {
-									upperhand[index].showCard(); // 상단 핸드의 카드를 보여줍니다.
+							upperhand[iOpen].moveTo(upperhand[iOpen].x, 130, 50, () => {
+									upperhand[iOpen].showCard(); // 상단 핸드의 카드를 보여줍니다.
 							});
 
-							lowerhand[index].moveTo(lowerhand[index].x, 270, 50, () => {
-									let userChoice = userChoices[index]; // 사용자의 선택을 가져옵니다.
+							lowerhand[iOpen].moveTo(lowerhand[iOpen].x, 270, 50, () => {
+									let userChoice = userChoices[iOpen]; // 사용자의 선택을 가져옵니다.
 									let result; // 게임 결과를 저장할 변수
 
-									// Ace(1)와 King(13)를 비교하여 High와 Low를 결정합니다.
-									if (lowerhand[index].rank == 1 && upperhand[index].rank == 13) {
-											result = 'High'; // 높음
-									} else if (lowerhand[index].rank == 1 || upperhand[index].rank == 13) {
-											result = 'Low'; // 낮음
-									} else {
-											if (lowerhand[index].rank > upperhand[index].rank) {
-													result = 'High'; // 높음
-											} else if (lowerhand[index].rank < upperhand[index].rank) {
-													result = 'Low'; // 낮음
-											} else {
-													result = 'Same'; // 같음
-											}
-									}
+									// 각 카드의 순서에 따라 비교를 수행합니다.
+									// A와 0이 비교될 때 Same으로 처리합니다.
+									if ((lowerhand[iOpen].rank === 2 && upperhand[iOpen].rank === 3) || (lowerhand[iOpen].rank === 3 && upperhand[iOpen].rank === 2)) {
+										result = 'Same';
+								} else {
+										// A가 10보다 큰 경우를 고려하여 비교합니다.
+										if (lowerhand[iOpen].rank === 2 && (upperhand[iOpen].rank === 13 || upperhand[iOpen].rank === 2)) {
+												result = 'High'; // A가 10보다 큰 경우 High를 결정
+										} else if (upperhand[iOpen].rank === 2 && (lowerhand[iOpen].rank === 13 || lowerhand[iOpen].rank === 2)) {
+												result = 'Low'; // A가 10보다 작은 경우 Low를 결정
+										} else {
+												// 나머지 경우에는 일반적인 비교를 수행합니다.
+												if (lowerhand[iOpen].rank > upperhand[iOpen].rank) {
+														result = 'High'; // 일반적인 경우에 High를 결정
+												} else if (lowerhand[iOpen].rank < upperhand[iOpen].rank) {
+														result = 'Low'; // 일반적인 경우에 Low를 결정
+												} else if (lowerhand[iOpen].rank == upperhand[iOpen].rank) {
+														result = 'Same'; // 일반적인 경우에 Same을 결정
+												}
+										}
+								}
 
 									// 결과를 표시합니다.
-									$(`#label-${index}`).text(userChoice === result ? 'Win' : 'Lose').show();
+									$(`#label-${iOpen}`).text(userChoice === result ? 'Win' : 'Lose').show();
 
 									// 다음 카드를 확인합니다.
-									revealNextCard(index + 1);
+									revealNextCard(iOpen + 1);
 							});
 					} else {
 							// 모든 카드 확인이 끝났을 때 처리할 내용
@@ -105,11 +121,12 @@ $('#open').click(() => {
 	}
 });
 
+
 // 선택한 버튼을 처리하는 함수입니다.
 $('.button-group button').click(function() {
 	let choice = $(this).text(); // 클릭한 버튼의 텍스트를 가져옵니다.
 	handleUserChoice(choice); // 사용자의 선택을 기록합니다.
-	$(`#result-${iOpen}`).text(`${iOpen + 1}. ${choice} 선택됨`).show(); // 선택한 값을 표시합니다.
+	$(`#result-${iOpen}`).text(`${iOpen + 1}. ${choice}`).show(); // 선택한 값을 표시합니다.
 
 	if (iOpen < 2) { // 모든 라운드가 선택되지 않았을 경우
 			iOpen++; // 다음 라운드로 이동합니다.
