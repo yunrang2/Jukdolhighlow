@@ -14,7 +14,7 @@ body {
 	border-radius:8px; 
 	box-shadow:black 0px 0px 2px; 
 	width: 600px; 
-	background:#FFF; 
+	background:#ffffff; 
 	margin:20px auto; 
 	border:solid 1px black; 
 	font-family: 'CustomFont', sans-serif;
@@ -63,19 +63,38 @@ h1 {
 a:visited {color:blue;}
 
 #deal {
+	font-size: 22px;
+	border-radius: 10px;
+	background-color:rgb(0, 247, 255);
 	position: absolute;
 	left:450px;
 	top:170px;
 }
 
 #open {
+	font-size: 22px;
+	border-radius: 10px;
+	background-color:rgb(185, 248, 11);
 	display: none;
 	position: absolute;
 	left:450px;
-	top:170px;
+	top:190px;
+}
+
+#reset-choice {
+	font-size: 22px;
+	border-radius: 10px;
+	background-color:rgb(0, 255, 13);
+	display: none;
+	position: absolute;
+	left:450px;
+	top:120px;
 }
 
 #reset {
+	font-size: 22px;
+	border-radius: 10px;
+	background-color:rgb(255, 119, 119);
 	display: none;
 	position: absolute;
 	left:450px;
@@ -83,8 +102,8 @@ a:visited {color:blue;}
 }
 
 footer {
-	font-size : 12px;
-	color:grey;
+	font-size : 18px;
+	color:rgb(0, 0, 0);
 	margin:10px;
 }
 
@@ -97,24 +116,30 @@ footer a:hover {
 }
 
 #label-0 {
+	display: none;
 	position: absolute;
 	left: 180px;
 	top: 192px;
 }
 
 #label-1 {
+	display: none;
 	position: absolute;
 	left: 280px;
 	top: 192px;
 }
 
 #label-2 {
+	display: none;
 	position: absolute;
 	left: 380px;
 	top: 192px;
 }
 
 .button {
+	font-size: 22px;
+	border-radius: 10px;
+	background-color:rgb(0, 247, 255);
 	margin-right: 10px; /* 각 버튼 사이의 오른쪽 마진 조정 */
 }
 
@@ -153,21 +178,9 @@ footer a:hover {
 	font-size: 18px;
 }
 
-#result-0 {
-	display: none; /* 기본적으로 텍스트를 숨깁니다. */
-	left: 20px;
-	top: 100px;
-}
-
-#result-1 {
-	display: none; /* 기본적으로 텍스트를 숨깁니다. */
-	left: 20px;
-	top: 100px;
-}
-
-#result-2 {
-	display: none; /* 기본적으로 텍스트를 숨깁니다. */
-	left: 20px;
-	top: 120px;
+.results {
+	font-size : 24px;
+	left: 20%;
+	top: 20%;
 }
 
