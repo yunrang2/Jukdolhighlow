@@ -1,7 +1,7 @@
 // 카드 테이블을 위한 요소를 지정합니다.
 cards.init({
 	table:'#card-table', 
-	cardUrl: 'https://raw.githubusercontent.com/yunrang2/upload/master/cards.png',
+	cardUrl: 'img/cards.png',
 	cardSize: {
 			width: 69,
 			height: 94,
